@@ -1,0 +1,12 @@
+/crypto-vibeness
+    -->client-server/
+        client.py
+        server.py
+    -->crypt/
+        data_encryption.py
+    -->auth/
+        password.py
+
+client-server = client - server communication
+crypt = data encryption system for client and server communication
+auth = authentication system (password verification and hashing)

@@ -1,0 +1,4 @@
+the goal is to make a very basic encrypted client-server messaging app
+there will not have a gui, it will just be in command line interface
+for the first phase, the communication will be local with only one client and a server
+for the second phase, the communication will be hosted with multiple clients and a server

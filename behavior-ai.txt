@@ -1,0 +1,5 @@
+keep it as simple as possible
+reliability and security is priorised
+try to use as much as possible the tech stack in the dependencies.txt file
+stick as much as possible to the goal and architecture
+you can ask for architecture changes but you must ask me and update architecture.txt and or dependencies.txt before doing file writing or code modification.

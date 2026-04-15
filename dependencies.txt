@@ -1,0 +1,4 @@
+python = main programming language
+hashlib = hashing library
+cryptography = encryption library
+socketserver = socket API for client-server communication
