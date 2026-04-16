@@ -1,0 +1,120 @@
+================================================================================
+CLIENT-SERVER COMMUNICATION SYSTEM - LAUNCH GUIDE
+================================================================================
+
+PROJECT OVERVIEW
+================================================================================
+A simple encrypted client-server messaging application with command-line interface.
+- Single server listening for incoming client connections
+- Multiple clients can connect and send messages
+- Local communication (Phase 1)
+
+
+SYSTEM REQUIREMENTS
+================================================================================
+- Python 3.6+
+- Dependencies: socketserver, socket (built-in Python libraries)
+
+
+HOW TO RUN
+================================================================================
+
+1. START THE SERVER
+   Location: client-server/server.py
+   Command:  python3 client-server/server.py
+   
+   Output will show:
+     [INFO] Server started on localhost:5000
+     [INFO] Waiting for incoming connections...
+   
+   Server will remain running and display messages from connected clients.
+   To stop: Press Ctrl+C
+
+
+2. START A CLIENT (in another terminal)
+   Location: client-server/client.py
+   Command:  python3 client-server/client.py
+   
+   Output will show:
+     [INFO] Connected to server at localhost:5000
+     [INFO] Type your message and press Enter
+     [INFO] Use '/disconnect' to quit gracefully
+   
+   You can now type messages and send them to the server.
+
+
+CLIENT COMMANDS
+================================================================================
+/disconnect    - Gracefully disconnect from the server and exit the client
+
+
+EXAMPLE SESSION
+================================================================================
+
+Terminal 1 (Server):
+  $ python3 client-server/server.py
+  [INFO] Server started on localhost:5000
+  [INFO] Waiting for incoming connections...
+  [INFO] Client connected: 127.0.0.1
+  [127.0.0.1]: Hello Server!
+  [127.0.0.1]: How are you?
+  [INFO] Client disconnected
+
+
+Terminal 2 (Client):
+  $ python3 client-server/client.py
+  [INFO] Connected to server at localhost:5000
+  [INFO] Type your message and press Enter
+  [INFO] Use '/disconnect' to quit gracefully
+  
+  You: Hello Server!
+  You: How are you?
+  You: /disconnect
+  [INFO] Disconnecting...
+  [INFO] Disconnected from server
+
+
+TESTING
+================================================================================
+A test script is provided for automated testing:
+   Command: python3 client-server/test.py
+   
+   This sends multiple test messages to verify communication is working.
+   Make sure the server is running before running the test.
+
+
+TROUBLESHOOTING
+================================================================================
+
+Q: "ConnectionRefusedError: Could not connect to server"
+A: Make sure the server is running first in another terminal.
+
+Q: "Address already in use" when starting server
+A: Another process is using port 5000. Wait a few seconds or restart the server.
+
+Q: Client not receiving prompt after sending a message
+A: This is normal. The server receives and displays the message.
+   The client only sends messages, it doesn't receive them (Phase 1 behavior).
+
+
+ARCHITECTURE
+================================================================================
+Server (server.py):
+  - Listens on localhost:5000
+  - Uses ThreadingTCPServer for concurrent client handling
+  - Displays all received messages with client IP address
+  - Supports multiple simultaneous connections
+
+Client (client.py):
+  - Connects to localhost:5000
+  - Sends user input as messages to the server
+  - Supports graceful disconnection via /disconnect command
+
+
+NOTES FOR FUTURE PHASES
+================================================================================
+Phase 2 will add:
+  - Encryption for client-server communication
+  - Authentication system
+  - Network hosting (beyond localhost)
+  - Message persistence

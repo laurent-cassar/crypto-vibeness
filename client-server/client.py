@@ -18,13 +18,21 @@ def connect_and_send():
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((HOST, PORT))
         print(f"[INFO] Connected to server at {HOST}:{PORT}")
-        print("[INFO] Type your message and press Enter (Ctrl+C to exit):\n")
+        print("[INFO] Type your message and press Enter")
+        print("[INFO] Use '/disconnect' to quit gracefully\n")
         
         while True:
             try:
                 message = input("You: ")
-                if message.strip():
-                    sock.sendall((message + '\n').encode('utf-8'))
+                
+                if not message.strip():
+                    continue
+                
+                if message.strip().lower() == '/disconnect':
+                    print("[INFO] Disconnecting...")
+                    break
+                
+                sock.sendall((message + '\n').encode('utf-8'))
             except KeyboardInterrupt:
                 print("\n[INFO] Disconnecting...")
                 break
