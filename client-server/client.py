@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
-Simple Client for Client-Server Communication
-Sends messages to the server
+Encrypted Client for Client-Server Communication
+Sends encrypted messages to the server
 """
 
 import socket
 import sys
+from data_encryption import EncryptionManager
+from shared_key import load_or_create_key
 
 HOST = 'localhost'
 PORT = 5000
@@ -13,11 +15,16 @@ BUFFER_SIZE = 1024
 
 
 def connect_and_send():
-    """Connect to server and send messages"""
+    """Connect to server and send encrypted messages"""
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((HOST, PORT))
         print(f"[INFO] Connected to server at {HOST}:{PORT}")
+        
+        # Load shared encryption key
+        shared_key = load_or_create_key()
+        encryption_mgr = EncryptionManager(shared_key)
+        print("[INFO] Using shared encryption key")
         print("[INFO] Type your message and press Enter")
         print("[INFO] Use '/disconnect' to quit gracefully\n")
         
@@ -32,7 +39,9 @@ def connect_and_send():
                     print("[INFO] Disconnecting...")
                     break
                 
-                sock.sendall((message + '\n').encode('utf-8'))
+                # Encrypt the message
+                encrypted_message = encryption_mgr.encrypt_message(message)
+                sock.sendall(encrypted_message + b'\n')
             except KeyboardInterrupt:
                 print("\n[INFO] Disconnecting...")
                 break

@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 """
-Test script for Client-Server communication
+Test script for Encrypted Client-Server communication
 """
 
 import socket
 import time
-import subprocess
-import sys
-import os
+from data_encryption import EncryptionManager
+from shared_key import load_or_create_key
 
 HOST = 'localhost'
 PORT = 5000
 
 
-def send_test_message(message):
-    """Send a test message to the server"""
+def send_test_message(message, encryption_mgr):
+    """Send an encrypted test message to the server"""
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((HOST, PORT))
-        sock.sendall((message + '\n').encode('utf-8'))
+        
+        # Encrypt the message
+        encrypted_message = encryption_mgr.encrypt_message(message)
+        sock.sendall(encrypted_message + b'\n')
         sock.close()
         print(f"✓ Message sent: {message}")
     except Exception as e:
@@ -28,20 +30,24 @@ def send_test_message(message):
 
 
 def test_communication():
-    """Test the client-server communication"""
-    print("[TEST] Starting Client-Server Communication Test\n")
+    """Test the encrypted client-server communication"""
+    print("[TEST] Starting Encrypted Client-Server Communication Test\n")
     
     test_messages = [
         "Hello Server!",
-        "This is a test message",
-        "Client-Server communication is working!"
+        "This is an encrypted test message",
+        "End-to-end encryption is working!"
     ]
+    
+    # Load shared encryption key
+    shared_key = load_or_create_key()
+    encryption_mgr = EncryptionManager(shared_key)
     
     time.sleep(1)  # Wait for server to be ready
     
-    print("[INFO] Sending test messages to server...\n")
+    print("[INFO] Sending encrypted test messages to server...\n")
     for msg in test_messages:
-        if send_test_message(msg):
+        if send_test_message(msg, encryption_mgr):
             time.sleep(0.5)
     
     print("\n[INFO] Check the server output above for received messages")
